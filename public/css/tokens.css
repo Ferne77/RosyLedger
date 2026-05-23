@@ -1,0 +1,25 @@
+:root {
+  --bg: #fff5f8;
+  --bg2: #ffe8f0;
+  --panel: #ffffff;
+  --panel2: rgba(255, 255, 255, 0.92);
+  --text: #6b3a52;
+  --muted: rgba(107, 58, 82, 0.58);
+  --line: rgba(236, 72, 153, 0.18);
+  --shadow: 0 14px 40px rgba(219, 39, 119, 0.12);
+  --shadow-hover: 0 18px 48px rgba(219, 39, 119, 0.14);
+  --accent: #db2777;
+  --accent-soft: #fce7f3;
+  --accent2: #f472b6;
+  --danger: #e11d48;
+  --warn: #c2410c;
+  --radius: 18px;
+  --radius2: 26px;
+  --side-ico-size: 26px;
+  --side-ico-glyph: 16px;
+  --ease: cubic-bezier(0.33, 1, 0.68, 1);
+  --font: "Nunito", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --chart-grid: rgba(219, 39, 119, 0.12);
+  --selection: rgba(244, 114, 182, 0.28);
+}

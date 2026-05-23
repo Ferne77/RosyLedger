@@ -1,0 +1,480 @@
+/**
+ * RosyLedger 可爱风主题 — 圆润图标、粉系配色、去商务感
+ */
+
+:root {
+  --cute-rose: #f472b6;
+  --cute-rose-deep: #db2777;
+  --cute-rose-soft: #fce7f3;
+  --cute-rose-pale: #fff5fa;
+  --cute-text: #6b3a52;
+  --cute-text-soft: rgba(107, 58, 82, 0.62);
+  --cute-success: #f9a8d4;
+  --cute-warn: #fda4af;
+  --cute-danger: #fb7185;
+}
+
+/* ── 全局文字色更柔 ── */
+body {
+  color: var(--cute-text);
+}
+
+h1.page-title,
+h2,
+.section-head h2,
+.card-value {
+  color: #7c3d5a;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.muted,
+.analytics-subtitle,
+.overview-subtitle {
+  color: var(--cute-text-soft);
+}
+
+/* ── 圆润描边图标（覆盖 Material 实心） ── */
+.side-ico svg,
+.nav-ico svg,
+.kpi-card__icon svg,
+.section-ico svg,
+.btn-ico svg,
+.overview-mini-ico svg,
+.analytics-card__icon svg {
+  fill: none !important;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.side-ico svg [fill],
+.kpi-card__icon svg [fill] {
+  fill: none !important;
+}
+
+/* 允许少量实心装饰（如 KPI 心形） */
+.kpi-card__icon svg .ico-fill,
+.overview-mini-ico svg .ico-fill {
+  fill: currentColor !important;
+  stroke: none !important;
+  opacity: 0.35;
+}
+
+.side-ico,
+.kpi-card__icon,
+.section-ico,
+.overview-mini-ico,
+.analytics-card__icon {
+  color: var(--cute-rose-deep) !important;
+  background: rgba(252, 231, 243, 0.95) !important;
+  border-radius: 16px !important;
+  box-shadow: none !important;
+}
+
+.side-ico {
+  width: var(--side-ico-size) !important;
+  height: var(--side-ico-size) !important;
+  padding: 0 !important;
+  border-radius: 9px !important;
+  display: grid !important;
+  place-items: center !important;
+  flex-shrink: 0;
+}
+
+.side-ico svg {
+  width: var(--side-ico-glyph) !important;
+  height: var(--side-ico-glyph) !important;
+  stroke-width: 2.1;
+}
+
+.kpi-card__icon {
+  width: 46px !important;
+  height: 46px !important;
+  border-radius: 18px !important;
+}
+
+.analytics-card__icon {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 16px !important;
+}
+
+/* Analyst 图标统一粉系，去掉蓝/绿/红块 */
+.analytics-card__icon--trend,
+.analytics-card__icon--gauge,
+.analytics-card__icon--warn,
+.analytics-card__icon--rank {
+  color: var(--cute-rose-deep) !important;
+  background: rgba(252, 231, 243, 0.92) !important;
+}
+
+.analytics-card__icon--warn {
+  background: rgba(255, 228, 237, 0.92) !important;
+  color: #e11d72 !important;
+}
+
+/* ── 标签：去商务大写 ── */
+.field-tag,
+.eyebrow,
+.planning-title,
+.sidebar-label,
+.card-label,
+.overview-status__head,
+.overview-mini-card span,
+.nav-user__hello,
+.live-pill,
+.analytics-card__head h3 {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+}
+
+.eyebrow,
+.planning-title,
+.sidebar-label {
+  color: rgba(219, 39, 119, 0.65);
+  font-size: 12px;
+}
+
+.field-tag,
+.card-label {
+  color: rgba(157, 23, 77, 0.55);
+  font-size: 12px;
+}
+
+.sidebar-label::before {
+  content: "♡ ";
+  opacity: 0.55;
+}
+
+/* ── 按钮 ── */
+.btn {
+  border-radius: 999px;
+  border-color: rgba(244, 114, 182, 0.22);
+  background: rgba(255, 255, 255, 0.94);
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(219, 39, 119, 0.06);
+  padding: 10px 18px;
+}
+
+.btn.primary {
+  border: none;
+  background: linear-gradient(
+    135deg,
+    var(--btn-grad-1, #fbcfe8) 0%,
+    var(--btn-grad-2, #f9a8d4) 40%,
+    var(--btn-grad-3, #f472b6) 100%
+  );
+  box-shadow: 0 8px 22px var(--theme-shadow, rgba(219, 39, 119, 0.22));
+}
+
+.btn--ghost {
+  background: rgba(252, 231, 243, 0.55);
+}
+
+/* ── 侧栏 & 顶栏 ── */
+.topbar {
+  background: rgba(255, 252, 254, 0.92);
+  border-bottom-color: rgba(244, 114, 182, 0.1);
+}
+
+.sidebar-card {
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(253, 242, 248, 0.88));
+  border-color: rgba(244, 114, 182, 0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-card::after {
+  content: "";
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(251, 207, 232, 0.5), transparent 70%);
+  pointer-events: none;
+}
+
+.side-link {
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.side-link.is-active,
+.side-link:hover {
+  background: linear-gradient(135deg, rgba(252, 231, 243, 0.98), rgba(255, 255, 255, 0.96));
+  box-shadow: 0 4px 16px rgba(219, 39, 119, 0.08);
+  color: var(--cute-rose-deep);
+}
+
+.brand-title {
+  letter-spacing: 0.01em;
+  background: linear-gradient(135deg, #be185d, #ec4899);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logo {
+  border-radius: 20px;
+  background: linear-gradient(145deg, #fff, #fce7f3);
+}
+
+/* ── 面板 & 卡片 ── */
+.panel,
+.hero-slab,
+.overview-control-card,
+.overview-status,
+.overview-mini-card,
+.analytics-card,
+.kpi-card {
+  border-radius: 26px;
+  border-color: rgba(244, 114, 182, 0.12);
+}
+
+.hero-slab {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(255, 248, 252, 0.94) 55%,
+    rgba(252, 231, 243, 0.78) 100%
+  );
+  position: relative;
+}
+
+.hero-slab::after {
+  content: "♡";
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  font-size: 22px;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.kpi-card,
+.overview-mini-card {
+  background: linear-gradient(165deg, #fff 0%, rgba(255, 247, 251, 0.95) 100%);
+}
+
+/* Overview 卡片全部粉系，去掉蓝/绿/黄商务色 */
+.overview-change-card,
+.overview-score-card--good,
+.overview-score-card--fair,
+.overview-score-card--poor,
+.overview-score-card--neutral,
+.overview-receipt-card {
+  background: linear-gradient(145deg, #fff, rgba(252, 231, 243, 0.72)) !important;
+  border-color: rgba(244, 114, 182, 0.18) !important;
+}
+
+.overview-change-card .overview-mini-ico,
+.overview-score-card--good .overview-mini-ico,
+.overview-score-card--fair .overview-mini-ico,
+.overview-score-card--poor .overview-mini-ico,
+.overview-score-card--neutral .overview-mini-ico,
+.overview-receipt-card .overview-mini-ico {
+  color: var(--cute-rose-deep) !important;
+}
+
+.overview-score-card--good strong,
+.overview-score-card--fair strong,
+.overview-score-card--poor strong,
+.overview-score-card--neutral strong {
+  color: #7c3d5a !important;
+}
+
+.overview-mini-ico {
+  width: 42px !important;
+  height: 42px !important;
+}
+
+/* ── 规划步骤 ── */
+.planning-step {
+  background: linear-gradient(135deg, #fbcfe8, #f472b6);
+  box-shadow: 0 4px 12px rgba(219, 39, 119, 0.16);
+  font-size: 11px;
+}
+
+.planning-section {
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+/* ── Analyst 数据色系统一为粉 ── */
+.analytics-trend-row__bar span {
+  background: linear-gradient(90deg, #fbcfe8, #f472b6) !important;
+}
+
+.analytics-trend-row.is-negative .analytics-trend-row__bar span {
+  background: linear-gradient(90deg, #fecdd3, #fb7185) !important;
+}
+
+.analytics-trend-row__rate {
+  color: #db2777 !important;
+}
+
+.analytics-trend-row.is-negative .analytics-trend-row__rate {
+  color: #e11d72 !important;
+}
+
+.analytics-gauge__fill,
+.analytics-gauge--good .analytics-gauge__fill,
+.analytics-gauge--fair .analytics-gauge__fill,
+.analytics-gauge--poor .analytics-gauge__fill {
+  stroke: url(#cuteGaugeGrad) !important;
+}
+
+.analytics-gauge--fair .analytics-gauge__fill {
+  stroke: #f9a8d4 !important;
+}
+
+.analytics-gauge--poor .analytics-gauge__fill {
+  stroke: #fda4af !important;
+}
+
+.analytics-warn-row {
+  background: rgba(255, 241, 246, 0.9) !important;
+  border-color: rgba(244, 114, 182, 0.16) !important;
+}
+
+.analytics-warn-row__top strong,
+.analytics-warn-row__meta {
+  color: #db2777 !important;
+}
+
+.analytics-warn-row__bar {
+  background: rgba(251, 207, 232, 0.5) !important;
+}
+
+.analytics-warn-row__bar span {
+  background: linear-gradient(90deg, #fda4af, #f472b6) !important;
+}
+
+.analytics-rank-row__badge {
+  background: rgba(252, 231, 243, 0.95) !important;
+  color: #be185d !important;
+}
+
+.analytics-rank-row:first-child .analytics-rank-row__badge {
+  background: linear-gradient(135deg, #f9a8d4, #ec4899) !important;
+  color: #fff !important;
+}
+
+.analytics-empty {
+  color: var(--cute-text-soft);
+  font-weight: 600;
+}
+
+.analytics-empty--ok {
+  color: #9d174d;
+  background: linear-gradient(135deg, rgba(252, 231, 243, 0.85), rgba(255, 255, 255, 0.9));
+  border: 1px solid rgba(244, 114, 182, 0.2);
+  border-radius: 16px;
+  padding: 16px;
+  font-weight: 700;
+}
+
+.analytics-empty__icon {
+  font-size: 1.2rem;
+}
+
+.analytics-empty__icon--check {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f472b6, #db2777);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 900;
+  box-shadow: 0 4px 14px rgba(219, 39, 119, 0.35);
+  flex-shrink: 0;
+}
+
+/* ── Live 状态 ── */
+.live-pill {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.live-pill[data-state='live'] {
+  color: #9d174d;
+  background: rgba(252, 231, 243, 0.85);
+  border-color: rgba(244, 114, 182, 0.22);
+}
+
+.live-pill[data-state='live']::before {
+  background: #f472b6;
+  box-shadow: 0 0 0 4px rgba(244, 114, 182, 0.2);
+}
+
+.live-pill[data-state='connecting'],
+.live-pill[data-state='reconnecting'] {
+  color: #9d174d;
+  background: rgba(255, 241, 248, 0.9);
+}
+
+.live-pill[data-state='connecting']::before,
+.live-pill[data-state='reconnecting']::before {
+  background: #f9a8d4;
+}
+
+/* ── 输入 & chip ── */
+input,
+select,
+textarea {
+  border-radius: 18px;
+  border-color: rgba(244, 114, 182, 0.16);
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.mini-toggle.is-active,
+.category-choice.is-selected {
+  background: linear-gradient(135deg, #fbcfe8, #f472b6);
+  border-color: transparent;
+  color: #fff;
+}
+
+.meta-chip {
+  border-radius: 999px;
+  background: rgba(252, 231, 243, 0.65);
+  border-color: rgba(244, 114, 182, 0.14);
+}
+
+/* ── 登录页 ── */
+.auth-card {
+  border-radius: 32px;
+  background: linear-gradient(165deg, #fff 0%, rgba(255, 248, 252, 0.96) 55%, rgba(252, 231, 243, 0.7) 100%);
+}
+
+.auth-title {
+  font-weight: 800;
+  color: #7c3d5a;
+}
+
+.quick-add-card {
+  border-radius: 20px;
+  border-color: rgba(244, 114, 182, 0.16);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.assistant-orb svg {
+  fill: none !important;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.assistant-orb {
+  color: var(--cute-rose-deep);
+  background: rgba(252, 231, 243, 0.95) !important;
+  border-radius: 18px !important;
+}

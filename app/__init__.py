@@ -1,0 +1,1 @@
+"""RosyLedger — FastAPI backend package."""

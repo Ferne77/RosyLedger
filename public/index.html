@@ -1,0 +1,1193 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      document.documentElement.dataset.session = 'out';
+    </script>
+    <script type="module">
+      import { applyStoredTheme } from '/js/lib/themeManager.js';
+      applyStoredTheme();
+    </script>
+    <style id="auth-gate">
+      [hidden] {
+        display: none !important;
+      }
+      html:not([data-session='in']) #app-shell {
+        display: none !important;
+      }
+      html[data-session='in'] #auth-screen {
+        display: none !important;
+      }
+      html[data-session='in'] #app-shell {
+        display: flex !important;
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fff5f8" />
+    <link rel="manifest" href="/manifest.json" />
+    <title>RosyLedger</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23db2777'/%3E%3Cpath fill='%23fff' d='M8 12h16v2H8zm0 6h10v2H8zm0 6h14v2H8z'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/tokens.css?v=8" />
+    <link rel="stylesheet" href="/css/base.css?v=9" />
+    <link rel="stylesheet" href="/css/layout.css?v=10" />
+    <link rel="stylesheet" href="/css/components.css?v=9" />
+    <link rel="stylesheet" href="/css/stats.css?v=10" />
+    <link rel="stylesheet" href="/css/dialog.css?v=8" />
+    <link rel="stylesheet" href="/css/kitty-assistant.css?v=8" />
+    <link rel="stylesheet" href="/css/cute-theme.css?v=11" />
+    <link rel="stylesheet" href="/css/companion-features.css?v=3" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  </head>
+  <body>
+    <section class="auth-screen" id="auth-screen">
+      <div class="auth-card">
+        <div class="brand auth-brand">
+          <div class="logo" aria-hidden="true">
+            <svg class="logo-svg" viewBox="0 0 40 40" fill="none">
+              <rect x="4" y="8" width="32" height="24" rx="6" fill="#db2777" />
+              <circle cx="28" cy="22" r="4" fill="#fff" opacity="0.95" />
+              <circle cx="28" cy="22" r="2" fill="#db2777" />
+            </svg>
+          </div>
+          <span class="brand-title">RosyLedger</span>
+        </div>
+        <h1 class="auth-title" id="auth-title">Welcome back</h1>
+        <p class="auth-copy" id="auth-copy">Sign in to keep your ledger, budget, and smart suggestions private.</p>
+        <form class="auth-form" id="auth-form">
+          <label class="field">
+            <span class="field-tag">Username</span>
+            <input id="auth-username" autocomplete="username" required minlength="3" maxlength="64" />
+          </label>
+          <label class="field">
+            <span class="field-tag">Password</span>
+            <input id="auth-password" type="password" autocomplete="current-password" required minlength="6" />
+          </label>
+          <label class="field" id="auth-confirm-wrap" hidden>
+            <span class="field-tag">Confirm password</span>
+            <input id="auth-confirm-password" type="password" autocomplete="new-password" minlength="6" />
+          </label>
+          <div class="auth-actions">
+            <button class="btn primary" id="btn-auth-submit" type="submit">Login</button>
+            <button class="btn" id="btn-register" type="button">Create account</button>
+          </div>
+          <div class="error" id="auth-error" hidden></div>
+        </form>
+      </div>
+    </section>
+
+    <div class="app" id="app-shell" hidden>
+      <header class="topbar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">
+            <svg class="logo-svg" viewBox="0 0 40 40" fill="none">
+              <defs>
+                <linearGradient id="lg" x1="8" y1="6" x2="34" y2="36" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#fbcfe8" />
+                  <stop offset="0.45" stop-color="#f472b6" />
+                  <stop offset="1" stop-color="#be185d" />
+                </linearGradient>
+              </defs>
+              <rect x="4" y="8" width="32" height="24" rx="6" fill="url(#lg)" />
+              <rect x="4" y="12" width="32" height="8" fill="rgba(255,255,255,0.22)" />
+              <circle cx="28" cy="22" r="4" fill="#fff" opacity="0.95" />
+              <circle cx="28" cy="22" r="2" fill="#db2777" />
+            </svg>
+          </div>
+          <span class="brand-title">RosyLedger</span>
+        </div>
+
+        <div class="topbar-actions">
+          <span class="live-pill" id="live-pill" hidden aria-live="polite">Live</span>
+          <span class="nav-user" id="nav-user">
+            <span class="nav-user__avatar">R</span>
+            <span>
+              <span class="nav-user__hello">Welcome back</span>
+              <span class="nav-user__name">Signed in</span>
+            </span>
+          </span>
+        </div>
+      </header>
+
+      <div class="app-body">
+        <aside class="sidebar" aria-label="Main navigation">
+          <div class="sidebar-card">
+            <div class="sidebar-label">Navigation</div>
+            <a class="side-link is-active" href="#overview" data-section-link="overview">
+              <svg class="side-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 10.5 12 4.5l7 6v9.5a1.5 1.5 0 0 1-1.5 1.5H6.5A1.5 1.5 0 0 1 5 20V10.5z"/><path d="M9.5 21v-6h5v6"/></svg>
+              Overview
+            </a>
+            <a class="side-link" href="#kitty-chat" data-section-link="kitty-chat">
+              <svg class="side-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v2M12 19v2M4.5 12H3M21 12h-1.5"/><path d="m7 7 1.5 1.5M15.5 15.5 17 17M17 7l-1.5 1.5M8.5 15.5 7 17"/><circle cx="12" cy="12" r="3.5"/></svg>
+              Chat with Kitty
+            </a>
+            <a class="side-link" href="#weekly-report" data-section-link="weekly-report">
+              <svg class="side-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 11h16"/></svg>
+              Weekly report
+            </a>
+            <a class="side-link" href="#wishlist" data-section-link="wishlist">
+              <svg class="side-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.5s-6.5-4.35-8.5-7.5C2 10.5 2.5 7 5.5 5.5 8 4.5 10 5.5 12 7.5 14 5.5 16 4.5 18.5 5.5 21.5 7 22 10.5 20 13 12 20.5 12 20.5z"/></svg>
+              Wishlist
+            </a>
+            <a class="side-link" href="#achievements" data-section-link="achievements">
+              <svg class="side-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="4"/><path d="M8 14 6 21l6-3 6 3-2-7"/></svg>
+              Achievements
+            </a>
+            <a class="side-link" href="#insights" data-section-link="insights">
+              <svg class="side-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="12" width="3" height="7" rx="1.5"/><rect x="10.5" y="8" width="3" height="11" rx="1.5"/><rect x="16" y="5" width="3" height="14" rx="1.5"/></svg>
+              Charts
+            </a>
+            <a class="side-link" href="#analyst-panel" data-section-link="analyst-panel">
+              <svg class="side-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 18V6M4 18h16M8 18v-5M12 18V9M16 18v-3"/></svg>
+              Analyst
+            </a>
+            <a class="side-link" href="#query" data-section-link="query">
+              <svg class="side-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4.5h9l3 3V19.5a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 5.5 19.5v-14A1.5 1.5 0 0 1 7 4h-1z"/><path d="M9 12h6M9 15.5h4"/></svg>
+              Ledger
+            </a>
+            <a class="side-link" href="#settings" data-section-link="settings">
+              <svg class="side-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.5 4.5l1.5 1.5M18 18l1.5 1.5M2 12h2M20 12h2M4.5 19.5 6 18M18 6l1.5-1.5"/></svg>
+              Settings
+            </a>
+          </div>
+          <div class="sidebar-card">
+            <div class="sidebar-label">Actions</div>
+            <button class="side-link side-button" type="button" id="btn-export-data">
+              <svg class="side-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v10M8.5 10.5 12 14l3.5-3.5"/><path d="M5 18.5h14"/></svg>
+              Export statement image
+            </button>
+            <button class="side-link side-button" type="button" id="btn-account">
+              <svg class="side-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 19.5c0-3.5 2.9-6 6.5-6s6.5 2.5 6.5 6"/></svg>
+              Account settings
+            </button>
+            <button class="side-link side-button side-button--danger" type="button" id="btn-logout">
+              <svg class="side-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 16.5 13.5 13 10 9.5"/><path d="M13.5 13H5"/><path d="M9 5.5H7A1.5 1.5 0 0 0 5.5 7v10A1.5 1.5 0 0 0 7 18.5h2"/></svg>
+              Logout
+            </button>
+          </div>
+        </aside>
+
+      <main class="main">
+        <div class="app-view" id="view-overview" data-app-view="overview">
+        <section class="hero-slab overview-hero" id="overview">
+          <div class="overview-copy">
+            <div class="eyebrow">Your little ledger</div>
+            <h1 class="page-title">This month ♡</h1>
+            <p class="overview-subtitle">
+              A gentle look at spending, budget progress, and how you're doing — no pressure, just clarity.
+            </p>
+            <div class="overview-mini-grid">
+              <div class="overview-mini-card overview-score-card overview-score-card--neutral" id="overview-health-card">
+                <span class="overview-mini-ico" id="overview-health-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="ico-fill" d="M12 20.5s-6.5-4.35-8.5-7.5C2 10.5 2.5 7 5.5 5.5 8 4.5 10 5.5 12 7.5 14 5.5 16 4.5 18.5 5.5 21.5 7 22 10.5 20 13 12 20.5 12 20.5z"/><path d="M12 20.5s-6.5-4.35-8.5-7.5C2 10.5 2.5 7 5.5 5.5 8 4.5 10 5.5 12 7.5 14 5.5 16 4.5 18.5 5.5 21.5 7 22 10.5 20 13 12 20.5 12 20.5z"/></svg>
+                </span>
+                <span>Wellness score</span>
+                <strong id="overview-health-score">--/100</strong>
+              </div>
+              <div class="overview-mini-card overview-change-card">
+                <span class="overview-mini-ico" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14"/><path d="M7 13.5 10.5 10l2.5 2.5L17.5 7"/><path d="M14.5 7H18v3.5"/></svg>
+                </span>
+                <span>Month change</span>
+                <strong id="overview-month-change">No comparison yet</strong>
+              </div>
+              <div class="overview-mini-card overview-receipt-card">
+                <span class="overview-mini-ico" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4.5h8v14l-2-1.2-2 1.2-2-1.2-2 1.2V4.5z"/><path d="M10 9h4M10 12.5h5M10 16h3"/></svg>
+                </span>
+                <span>Receipts</span>
+                <strong id="overview-receipt-count">0 attached</strong>
+              </div>
+            </div>
+            <div class="overview-status">
+              <div class="overview-status__head">Budget progress</div>
+              <div class="budget-meter" aria-label="Budget usage">
+                <div class="budget-meter__bar">
+                  <span id="budget-meter-fill"></span>
+                </div>
+                <div class="budget-meter__label" id="budget-meter-label">Set a budget to start tracking progress.</div>
+              </div>
+              <div class="category-budget-list" id="category-budget-list"></div>
+            </div>
+          </div>
+          <div class="overview-control-card">
+            <div class="planning-accordion" id="planning-accordion">
+              <details class="planning-section planning-section--primary" open data-planning-step="1">
+                <summary class="planning-section__trigger">
+                  <span class="planning-step">1</span>
+                  <div class="planning-section__head-copy">
+                    <div class="planning-title">Monthly budget</div>
+                    <p class="planning-section__hint">Choose the month and set how much you want to spend.</p>
+                    <p class="planning-section__meta" id="planning-step-1-meta">Not configured</p>
+                  </div>
+                  <span class="planning-section__chevron" aria-hidden="true"></span>
+                </summary>
+                <div class="planning-section__body">
+                  <div class="planning-section__inner">
+                  <div class="overview-control-grid">
+                    <label class="field month-field">
+                      <span class="field-tag">Report month</span>
+                      <span class="input-month-wrap">
+                        <input type="month" id="filter-month" />
+                      </span>
+                    </label>
+                    <label class="field budget-field">
+                      <span class="field-tag">Budget amount</span>
+                      <input type="number" id="budget-amount" min="0" step="0.01" placeholder="0.00" />
+                    </label>
+                  </div>
+                  <button class="btn primary overview-save" type="button" id="btn-save-budget">Save monthly budget</button>
+                  </div>
+                </div>
+              </details>
+              <details class="planning-section" data-planning-step="2">
+                <summary class="planning-section__trigger">
+                  <span class="planning-step">2</span>
+                  <div class="planning-section__head-copy">
+                    <div class="planning-title">Saving target</div>
+                    <p class="planning-section__hint">Set how much of your monthly budget you want to keep unspent.</p>
+                    <p class="planning-section__meta" id="planning-step-2-meta">No target set</p>
+                  </div>
+                  <span class="planning-section__chevron" aria-hidden="true"></span>
+                </summary>
+                <div class="planning-section__body">
+                  <div class="planning-section__inner">
+                  <div class="overview-control-grid overview-control-grid--single">
+                    <label class="field">
+                      <span class="field-tag">Saving target (%)</span>
+                      <input type="number" id="goal-percent" min="0" max="95" step="1" placeholder="Save 15%" />
+                    </label>
+                    <button class="btn btn--ghost overview-save-inline" type="button" id="btn-save-goal">Save target</button>
+                  </div>
+                  </div>
+                </div>
+              </details>
+              <details class="planning-section planning-section--board" data-planning-step="3">
+                <summary class="planning-section__trigger">
+                  <span class="planning-step">3</span>
+                  <div class="planning-section__head-copy">
+                    <div class="planning-title">Category allocation</div>
+                    <p class="planning-section__hint">Pick one category, set its amount, then save when you are done.</p>
+                    <p class="planning-section__meta" id="planning-step-3-meta">Nothing allocated yet</p>
+                  </div>
+                  <span class="planning-section__chevron" aria-hidden="true"></span>
+                </summary>
+                <div class="planning-section__body">
+                  <div class="planning-section__inner">
+                  <div class="budget-board-summary budget-board-summary--inline">
+                    <span>Pool <strong id="budget-board-pool">$0.00</strong></span>
+                    <span>Unassigned <strong id="budget-board-remaining">$0.00</strong></span>
+                  </div>
+                  <div class="budget-board-editor">
+                    <label class="field">
+                      <span class="field-tag">Category</span>
+                      <select id="budget-board-category"></select>
+                    </label>
+                    <label class="field budget-board-amount-field">
+                      <span class="field-tag">Amount</span>
+                      <div class="budget-board-amount">
+                        <button type="button" class="budget-board-step" id="budget-board-minus" aria-label="Decrease amount">−</button>
+                        <input type="number" id="budget-board-amount" min="0" step="1" placeholder="0.00" />
+                        <button type="button" class="budget-board-step" id="budget-board-plus" aria-label="Increase amount">+</button>
+                      </div>
+                    </label>
+                    <div class="budget-board-preview">
+                      <div class="budget-board-preview__row">
+                        <span id="budget-board-preview-label">Choose a category</span>
+                        <strong id="budget-board-preview-value">$0.00</strong>
+                      </div>
+                      <div class="budget-board-preview__track" aria-hidden="true">
+                        <span id="budget-board-preview-fill"></span>
+                      </div>
+                      <p class="budget-board-preview__hint" id="budget-board-preview-hint">Share of monthly pool</p>
+                    </div>
+                    <button class="btn" type="button" id="btn-apply-budget-board">Apply to category</button>
+                  </div>
+                  <div class="budget-board-chips" id="budget-board-chips"></div>
+                  <button class="btn primary" type="button" id="btn-save-budget-board">Save allocations</button>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+        </section>
+
+        <div class="cards kpi-row">
+          <div class="card kpi-card">
+            <div class="kpi-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 8v4l2.5 1.5"/></svg>
+            </div>
+            <div class="kpi-card__body">
+              <div class="card-label">Month total</div>
+              <div class="card-value" id="kpi-total-month">$0.00</div>
+              <div class="meta-chip meta-chip--subtle" id="kpi-total-month-sub">—</div>
+            </div>
+          </div>
+          <div class="card kpi-card">
+            <div class="kpi-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7h8M8 12h8M8 17h5"/><rect x="5" y="5" width="14" height="14" rx="3"/></svg>
+            </div>
+            <div class="kpi-card__body">
+              <div class="card-label">Rows</div>
+              <div class="card-value" id="kpi-items">0</div>
+              <div class="meta-chip meta-chip--subtle">Filtered list</div>
+            </div>
+          </div>
+          <div class="card kpi-card">
+            <div class="kpi-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h8l2 4v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V10l2-4z"/><circle cx="12" cy="13" r="2"/></svg>
+            </div>
+            <div class="kpi-card__body">
+              <div class="card-label">Top category</div>
+              <div class="card-value card-value--sm" id="kpi-top-category">—</div>
+              <div class="meta-chip meta-chip--subtle" id="kpi-top-category-sub">—</div>
+            </div>
+          </div>
+          <div class="card kpi-card">
+            <div class="kpi-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="ico-fill" d="M12 20.5s-6.5-4.35-8.5-7.5C2 10.5 2.5 7 5.5 5.5 8 4.5 10 5.5 12 7.5 14 5.5 16 4.5 18.5 5.5 21.5 7 22 10.5 20 13 12 20.5 12 20.5z"/><path d="M12 20.5s-6.5-4.35-8.5-7.5C2 10.5 2.5 7 5.5 5.5 8 4.5 10 5.5 12 7.5 14 5.5 16 4.5 18.5 5.5 21.5 7 22 10.5 20 13 12 20.5 12 20.5z"/></svg>
+            </div>
+            <div class="kpi-card__body">
+              <div class="card-label">Budget status</div>
+              <div class="card-value card-value--sm" id="kpi-budget">—</div>
+              <div class="meta-chip meta-chip--subtle" id="kpi-budget-sub">Set a budget</div>
+            </div>
+          </div>
+        </div>
+        </div>
+
+        <div class="app-view" id="view-kitty-chat" data-app-view="kitty-chat" hidden>
+        <section class="panel panel--lift kitty-chat-page">
+          <div class="kitty-chat-hero">
+            <div class="kitty-chat-hero__glow" aria-hidden="true"></div>
+            <div class="kitty-chat-hero__avatar-wrap">
+              <img src="/images/hello-kitty-256.png" alt="Hello Kitty" width="112" height="112" class="kitty-chat-hero__avatar" />
+            </div>
+            <div class="kitty-chat-hero__copy">
+              <div class="eyebrow">Chat with Kitty</div>
+              <h2 id="kitty-page-greeting">Hi there~</h2>
+              <p class="kitty-chat-sub" id="kitty-page-subtitle">Your gentle money buddy</p>
+            </div>
+          </div>
+          <div class="kitty-chat-layout">
+            <div class="kitty-chat-main">
+              <div class="kitty-page-chips">
+                <button type="button" class="smart-chip" data-kitty-page-chip="How am I doing this month?">Budget check</button>
+                <button type="button" class="smart-chip" data-kitty-page-chip="If I skip 3 coffees how much do I save?">Coffee simulator</button>
+                <button type="button" class="smart-chip" data-kitty-page-chip="How many takeouts can I afford?">Meal count</button>
+                <button type="button" class="smart-chip" data-kitty-page-chip="I'm feeling stressed about money">Emotional support</button>
+              </div>
+              <div class="kitty-page-messages" id="kitty-page-messages" aria-live="polite"></div>
+              <div class="kitty-page-compose">
+                <textarea id="kitty-page-input" rows="2" placeholder="Talk to Kitty about feelings, budget, or your day…" maxlength="500"></textarea>
+                <button type="button" class="btn primary kitty-page-send" id="kitty-page-send">Send ♡</button>
+              </div>
+            </div>
+            <aside class="kitty-chat-aside">
+              <div class="kitty-aside-block card pad">
+                <h3 class="h3">Kitty outfit ♡</h3>
+                <p class="kitty-aside-hint">Switch theme colors — more unlock with badges.</p>
+                <div id="kitty-chat-theme-picks" class="theme-grid theme-grid--compact"></div>
+              </div>
+              <div class="kitty-aside-block card pad">
+                <h3 class="h3">Gentle tips</h3>
+                <div id="kitty-page-suggestions" class="kitty-page-suggestions"></div>
+              </div>
+              <div class="kitty-aside-block card pad companion-widget-card" id="companion-widget-card"></div>
+            </aside>
+          </div>
+        </section>
+        </div>
+
+        <div class="app-view" id="view-weekly-report" data-app-view="weekly-report" hidden>
+        <section class="panel panel--lift">
+          <div class="section-head">
+            <div class="section-head__title"><h2>Weekly warm report</h2></div>
+          </div>
+          <div class="card pad" id="weekly-report-body"></div>
+        </section>
+        </div>
+
+        <div class="app-view" id="view-wishlist" data-app-view="wishlist" hidden>
+        <section class="panel panel--lift">
+          <div class="section-head"><h2>Wishlist ♡</h2></div>
+          <div class="card pad wish-form">
+            <label class="field"><span class="field-tag">Dream item</span><input id="wish-title" maxlength="120" placeholder="New headphones" /></label>
+            <label class="field"><span class="field-tag">Target ($)</span><input id="wish-amount" type="number" min="1" step="0.01" /></label>
+            <button class="btn primary" type="button" id="btn-add-wish">Add wish</button>
+          </div>
+          <div id="wishlist-list" class="wishlist-grid"></div>
+        </section>
+        </div>
+
+        <div class="app-view" id="view-achievements" data-app-view="achievements" hidden>
+        <section class="panel panel--lift">
+          <div class="section-head">
+            <div class="section-head__title"><h2>Achievements & wardrobe</h2></div>
+          </div>
+          <div id="achievements-wall" class="badge-grid"></div>
+          <div class="card pad">
+            <h3 class="h3">Kitty wardrobe — themes</h3>
+            <p class="companion-copy">Earn stickers from badges to unlock panel colors.</p>
+            <div id="companion-theme-grid" class="theme-grid"></div>
+          </div>
+        </section>
+        </div>
+
+        <div class="app-view" id="view-assistant-panel" data-app-view="assistant-panel" hidden>
+        <section class="panel panel--lift assistant-panel assistant-panel--premium" id="assistant-panel">
+          <div class="assistant-head">
+            <div class="assistant-head__main">
+              <span class="assistant-orb" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2M12 19v2M4.5 12H3M21 12h-1.5"/><path d="m7 7 1.5 1.5M15.5 15.5 17 17M17 7l-1.5 1.5M8.5 15.5 7 17"/><circle cx="12" cy="12" r="3.5"/></svg>
+              </span>
+              <div>
+                <div class="eyebrow">Gentle spending tips</div>
+                <h2>Smart suggestions</h2>
+                <p class="assistant-copy">
+                  Hello Kitty reads your budget and recent entries to offer kind, helpful nudges — never judgment.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="suggestion-list" id="assistant-list"></div>
+        </section>
+        </div>
+
+        <div class="app-view" id="view-insights" data-app-view="insights" hidden>
+        <section class="panel panel--lift" id="insights">
+          <div class="section-head">
+            <div class="section-head__title">
+              <span class="section-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="12" width="3" height="7" rx="1.5"/><rect x="10.5" y="8" width="3" height="11" rx="1.5"/><rect x="16" y="5" width="3" height="14" rx="1.5"/></svg>
+              </span>
+              <h2>Charts</h2>
+            </div>
+          </div>
+
+          <div class="split">
+            <div class="card pad chart-surface">
+              <div class="chart-head chart-head--pie">
+                <div>
+                  <h3 class="h3">Category split</h3>
+                  <p class="chart-subtitle">Where your spending goes</p>
+                </div>
+                <div class="chart-stat-pill chart-stat-pill--controls" role="group" aria-label="Category chart scope">
+                  <div class="mini-toggle-group">
+                    <button class="mini-toggle is-active" type="button" id="btn-category-scope-all">All</button>
+                    <button class="mini-toggle" type="button" id="btn-category-scope-month">Month</button>
+                  </div>
+                  <span class="chart-stat-pill__value" id="stats-total">—</span>
+                </div>
+              </div>
+              <div class="pie-chart-frame">
+                <div class="pie-chart-glow" aria-hidden="true"></div>
+                <div class="chart-box chart-box--pie">
+                  <canvas id="chart-category" aria-label="Category share"></canvas>
+                </div>
+                <div class="chart-empty" id="category-empty" hidden>
+                  Add expenses to see category distribution.
+                </div>
+              </div>
+            </div>
+            <div class="card pad chart-surface chart-surface--trend">
+              <div class="trend-card-top">
+                <div>
+                  <h3 class="h3">Monthly trend</h3>
+                  <p class="chart-subtitle">Compare spending across the selected range</p>
+                </div>
+                <div class="trend-controls">
+                  <div class="trend-mode-switch" role="group" aria-label="Trend mode">
+                    <button
+                      type="button"
+                      class="trend-mode-btn is-active"
+                      id="btn-trend-mode-cumulative"
+                      aria-pressed="true"
+                    >
+                      Cumulative
+                    </button>
+                    <button
+                      type="button"
+                      class="trend-mode-btn"
+                      id="btn-trend-mode-monthly"
+                      aria-pressed="false"
+                    >
+                      Monthly spend
+                    </button>
+                  </div>
+                  <div class="trend-range-controls">
+                    <div class="trend-quick-controls" role="group" aria-label="Quick trend ranges">
+                      <button type="button" class="mini-toggle" data-trend-months="3">3M</button>
+                      <button type="button" class="mini-toggle is-active" data-trend-months="6">6M</button>
+                      <button type="button" class="mini-toggle" data-trend-months="12">12M</button>
+                    </div>
+                    <label class="trend-field">
+                      <span class="field-tag">From</span>
+                      <input
+                        type="month"
+                        id="trend-start-month"
+                        class="trend-month-input"
+                      />
+                    </label>
+                    <label class="trend-field">
+                      <span class="field-tag">To</span>
+                      <input
+                        type="month"
+                        id="trend-end-month"
+                        class="trend-month-input"
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="trend-summary-row" aria-label="Trend summary">
+                <div>
+                  <span>Total</span>
+                  <strong id="trend-summary-total">—</strong>
+                </div>
+                <div>
+                  <span>Average</span>
+                  <strong id="trend-summary-average">—</strong>
+                </div>
+                <div>
+                  <span>Peak month</span>
+                  <strong id="trend-summary-peak">—</strong>
+                </div>
+              </div>
+              <div class="trend-range-strip" aria-live="polite">
+                <div class="trend-range-pair">
+                  <span class="trend-range-label">From</span>
+                  <time class="trend-range-date" id="trend-range-start">—</time>
+                </div>
+                <span class="trend-range-arrow" aria-hidden="true">
+                  <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
+                    <path
+                      d="M1 6h14M11 1l5 5-5 5"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+                <div class="trend-range-pair trend-range-pair--end">
+                  <span class="trend-range-label">To</span>
+                  <time class="trend-range-date trend-range-date--end" id="trend-range-end">—</time>
+                </div>
+              </div>
+              <p class="trend-range-iso" id="trend-range-sub"></p>
+              <p class="trend-mode-sub" id="trend-mode-sub"></p>
+              <div class="chart-box chart-box--trendline">
+                <canvas id="chart-trend" aria-label="Monthly trend"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="error" id="stats-error" hidden></div>
+        </section>
+        </div>
+
+        <div class="app-view" id="view-analyst-panel" data-app-view="analyst-panel" hidden>
+        <section class="panel panel--lift" id="analyst-panel">
+          <svg width="0" height="0" aria-hidden="true" style="position:absolute"><defs><linearGradient id="cuteGaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#fbcfe8"/><stop offset="100%" stop-color="#f472b6"/></linearGradient></defs></svg>
+          <div class="section-head">
+            <div class="section-head__title">
+              <span class="section-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18V6M4 18h16M8 18v-5M12 18V9M16 18v-3"/></svg>
+              </span>
+              <h2>Analyst</h2>
+            </div>
+          </div>
+          <p class="analytics-subtitle">A soft look at savings, income steadiness, and where spending went this month.</p>
+          <div class="analytics-grid">
+            <article class="analytics-card analytics-card--trend">
+              <div class="analytics-card__head">
+                <span class="analytics-card__icon analytics-card__icon--trend" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14"/><path d="M7.5 13.5 11 10l2.5 2.5L16.5 8"/></svg>
+                </span>
+                <div>
+                  <h3>6-month savings rate</h3>
+                  <p>How much you're keeping each month</p>
+                </div>
+              </div>
+              <div id="analytics-savings" class="analytics-trend"></div>
+            </article>
+            <article class="analytics-card analytics-card--gauge">
+              <div class="analytics-card__head">
+                <span class="analytics-card__icon analytics-card__icon--gauge" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="ico-fill" d="M12 20.5s-6.5-4.35-8.5-7.5C2 10.5 2.5 7 5.5 5.5 8 4.5 10 5.5 12 7.5 14 5.5 16 4.5 18.5 5.5 21.5 7 22 10.5 20 13 12 20.5 12 20.5z"/><path d="M12 20.5s-6.5-4.35-8.5-7.5C2 10.5 2.5 7 5.5 5.5 8 4.5 10 5.5 12 7.5 14 5.5 16 4.5 18.5 5.5 21.5 7 22 10.5 20 13 12 20.5 12 20.5z"/></svg>
+                </span>
+                <div>
+                  <h3>Income stability</h3>
+                  <p>How steady your inflows feel</p>
+                </div>
+              </div>
+              <div id="analytics-stability" class="analytics-gauge-wrap"></div>
+            </article>
+            <article class="analytics-card analytics-card--warn">
+              <div class="analytics-card__head">
+                <span class="analytics-card__icon analytics-card__icon--warn" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 9v4M12 15.5h.01"/></svg>
+                </span>
+                <div>
+                  <h3>Over-budget categories</h3>
+                  <p>Where limits got a little tight</p>
+                </div>
+              </div>
+              <div id="analytics-overspend" class="analytics-warn-list"></div>
+            </article>
+            <article class="analytics-card analytics-card--rank">
+              <div class="analytics-card__head">
+                <span class="analytics-card__icon analytics-card__icon--rank" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7h8l2 3v7a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6.5 17v-7l1.5-3z"/><path d="M9.5 11h5"/></svg>
+                </span>
+                <div>
+                  <h3>Category spend rank</h3>
+                  <p>Your top spending spots</p>
+                </div>
+              </div>
+              <div id="analytics-category-rank" class="analytics-rank"></div>
+            </article>
+            <article class="analytics-card analytics-card--rank">
+              <div class="analytics-card__head">
+                <span class="analytics-card__icon analytics-card__icon--gauge" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-6.5-4.35-8.5-7.5C2 10.5 2.5 7 5.5 5.5 8 4.5 10 5.5 12 7.5 14 5.5 16 4.5 18.5 5.5 21.5 7 22 10.5 20 13 12 20.5 12 20.5z"/></svg>
+                </span>
+                <div>
+                  <h3>Spending emotions</h3>
+                  <p>How you felt when money went out — tag moods when logging</p>
+                </div>
+              </div>
+              <div id="emotion-breakdown"></div>
+            </article>
+          </div>
+          <div class="error" id="analytics-error" hidden></div>
+        </section>
+        </div>
+
+        <div class="app-view" id="view-query" data-app-view="query" hidden>
+        <section class="panel panel--lift" id="query">
+          <div class="section-head">
+            <div class="section-head__title">
+              <span class="section-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4.5h9l3 3V19.5a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 5.5 19.5v-14A1.5 1.5 0 0 1 7 4h-1z"/><path d="M9 12h6M9 15.5h4"/></svg>
+              </span>
+              <h2>Ledger</h2>
+            </div>
+            <div class="ledger-actions">
+              <button class="btn btn--income" id="btn-add-income" type="button">
+                <svg class="btn-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V9"/><path d="m8 13 4-4 4 4"/><path d="M5 5h14"/></svg>
+                Add income
+              </button>
+              <button class="btn primary" id="btn-add-expense" type="button">
+                <svg class="btn-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                Add expense
+              </button>
+            </div>
+          </div>
+
+          <div class="quick-add-strip" aria-label="Quick add templates">
+            <button class="quick-add-card" type="button" data-template="coffee">
+              <span>Coffee</span>
+              <strong>$5.50</strong>
+            </button>
+            <button class="quick-add-card" type="button" data-template="groceries">
+              <span>Groceries</span>
+              <strong>$74.25</strong>
+            </button>
+            <button class="quick-add-card" type="button" data-template="uber">
+              <span>Uber</span>
+              <strong>$18.00</strong>
+            </button>
+          </div>
+
+          <div class="template-builder">
+            <div>
+              <div class="field-tag">Custom quick add</div>
+              <p class="template-builder__hint">Create your own one-click expense template.</p>
+            </div>
+            <input id="template-title" maxlength="80" placeholder="Template title" />
+            <input id="template-amount" type="number" min="0.01" step="0.01" placeholder="Amount" />
+            <select id="template-category"></select>
+            <button class="btn" type="button" id="btn-save-template">Save template</button>
+          </div>
+          <div class="custom-template-list" id="custom-template-list"></div>
+
+          <section class="receipt-gallery" id="receipt-gallery" hidden>
+            <div class="receipt-gallery__head">
+              <div>
+                <div class="field-tag">Receipt gallery</div>
+                <p>All attached receipts from the current ledger view.</p>
+              </div>
+            </div>
+            <div class="receipt-gallery__grid" id="receipt-gallery-grid"></div>
+          </section>
+
+          <div class="filter-slab">
+            <label class="field">
+              <span class="field-tag">Month</span>
+              <input
+                type="month"
+                id="ledger-month"
+                title="Leave empty to list every expense"
+              />
+            </label>
+            <label class="field">
+              <span class="field-tag">Category</span>
+              <select id="filter-category">
+                <option value="">All</option>
+              </select>
+            </label>
+            <label class="field grow">
+              <span class="field-tag">Search</span>
+              <input id="filter-q" type="search" placeholder="Title or notes" />
+            </label>
+            <div class="field field-inline filter-actions">
+              <button class="btn btn--ghost" id="btn-clear-filters" type="button">Reset</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="table" aria-label="Expenses">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Title</th>
+                  <th>Category</th>
+                  <th class="right">Amt</th>
+                  <th class="right"><span class="sr-only">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody id="expenses-tbody"></tbody>
+            </table>
+            <div class="empty-card" id="expenses-empty" hidden>
+              <div class="empty-card__art" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none">
+                  <rect x="12" y="16" width="40" height="36" rx="6" stroke="currentColor" stroke-width="2" opacity="0.35"/>
+                  <path d="M20 28h24M20 36h16M20 44h20" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.45"/>
+                </svg>
+              </div>
+              <p class="empty-card__title">Nothing here</p>
+              <p class="empty-card__hint">Add an expense to begin</p>
+            </div>
+            <div class="error" id="expenses-error" hidden></div>
+          </div>
+
+          <section class="trash-panel" id="trash-panel">
+            <div class="trash-panel__head">
+              <div>
+                <div class="field-tag">Recycle bin</div>
+                <p>Soft-deleted records stay here for 30 days before automatic cleanup.</p>
+              </div>
+              <span class="meta-chip" id="trash-count">0 item(s)</span>
+            </div>
+            <div class="trash-list" id="trash-list"></div>
+            <div class="empty-card" id="trash-empty" hidden>
+              <p class="empty-card__title">Recycle bin is empty</p>
+            </div>
+            <div class="error" id="trash-error" hidden></div>
+          </section>
+        </section>
+        </div>
+
+        <div class="app-view" id="view-settings" data-app-view="settings" hidden>
+          <div class="settings-page settings-page--in-app">
+            <div class="settings-hero">
+              <div>
+                <div class="eyebrow">Management center</div>
+                <h1 class="page-title">Settings</h1>
+                <p class="settings-subtitle">
+                  Manage your account, budget plan, quick templates, and statement export. Data updates automatically via Live.
+                </p>
+              </div>
+              <div class="settings-user-card">
+                <span class="nav-user__avatar" id="settings-user-avatar">R</span>
+                <div>
+                  <span class="nav-user__hello">Signed in as</span>
+                  <strong id="settings-account-summary">Signed in account</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-grid settings-grid--page">
+              <article class="settings-card settings-card--account settings-card--form settings-card--compact">
+                <div class="settings-card__top">
+                  <div class="settings-card__icon">A</div>
+                  <div>
+                    <h3>Account</h3>
+                    <p>Update your username or password directly here.</p>
+                  </div>
+                </div>
+                <div class="settings-form-grid">
+                  <label class="field col-span-2">
+                    <span class="field-tag">Username</span>
+                    <input id="settings-username" minlength="3" maxlength="64" />
+                  </label>
+                  <label class="field">
+                    <span class="field-tag">Current password</span>
+                    <input id="settings-current-password" type="password" autocomplete="current-password" />
+                  </label>
+                  <label class="field">
+                    <span class="field-tag">New password</span>
+                    <input id="settings-new-password" type="password" autocomplete="new-password" minlength="6" />
+                  </label>
+                </div>
+                <div class="settings-actions">
+                  <button class="btn" type="button" id="btn-settings-save-username">Save username</button>
+                  <button class="btn primary" type="button" id="btn-settings-save-password">Change password</button>
+                  <button class="btn danger" type="button" id="btn-settings-delete-account">Delete account</button>
+                </div>
+              </article>
+
+              <article class="settings-card settings-card--data settings-card--form settings-card--compact">
+                <div class="settings-card__top">
+                  <div class="settings-card__icon">↓</div>
+                  <div>
+                    <h3>Data and statement</h3>
+                    <p>Export a designed statement image for the selected report month.</p>
+                  </div>
+                </div>
+                <div class="settings-actions">
+                  <button class="btn primary" type="button" id="btn-settings-export">Export statement image</button>
+                  <button class="btn danger" type="button" id="btn-settings-logout">Logout</button>
+                </div>
+              </article>
+
+              <article class="settings-card settings-card--planning settings-card--form settings-card--wide">
+                <div class="settings-card__top">
+                  <div class="settings-card__icon">%</div>
+                  <div>
+                    <h3>Planning</h3>
+                    <p>Set the report month, monthly budget, spending goal, and category limit.</p>
+                  </div>
+                </div>
+                <div class="settings-form-grid settings-form-grid--planning">
+                  <label class="field">
+                    <span class="field-tag">Report month</span>
+                    <span class="input-month-wrap">
+                      <input type="month" id="settings-month" />
+                    </span>
+                  </label>
+                  <label class="field">
+                    <span class="field-tag">Budget</span>
+                    <input type="number" id="settings-budget-amount" min="0" step="0.01" placeholder="0.00" />
+                  </label>
+                  <label class="field">
+                    <span class="field-tag">Spending goal</span>
+                    <input type="number" id="settings-goal-percent" min="0" max="95" step="1" placeholder="Save 15%" />
+                  </label>
+                  <label class="field">
+                    <span class="field-tag">Category</span>
+                    <select id="settings-category-budget-category"></select>
+                  </label>
+                  <label class="field col-span-2">
+                    <span class="field-tag">Category amount</span>
+                    <input type="number" id="settings-category-budget-amount" min="0" step="0.01" placeholder="0.00" />
+                  </label>
+                </div>
+                <div class="settings-actions">
+                  <button class="btn primary" type="button" id="btn-settings-save-budget">Save budget</button>
+                  <button class="btn" type="button" id="btn-settings-save-goal">Save goal</button>
+                  <button class="btn" type="button" id="btn-settings-save-category-budget">Save category limit</button>
+                </div>
+              </article>
+
+              <article class="settings-card settings-card--templates settings-card--form settings-card--wide">
+                <div class="settings-card__top">
+                  <div class="settings-card__icon">+</div>
+                  <div>
+                    <h3>Quick add templates</h3>
+                    <p id="settings-template-summary">No custom templates yet</p>
+                  </div>
+                </div>
+                <div class="settings-form-grid">
+                  <label class="field">
+                    <span class="field-tag">Template title</span>
+                    <input id="settings-template-title" maxlength="80" placeholder="Lunch, coffee, gym" />
+                  </label>
+                  <label class="field">
+                    <span class="field-tag">Amount</span>
+                    <input id="settings-template-amount" type="number" min="0.01" step="0.01" placeholder="0.00" />
+                  </label>
+                  <label class="field col-span-2">
+                    <span class="field-tag">Category</span>
+                    <select id="settings-template-category"></select>
+                  </label>
+                </div>
+                <div class="settings-actions">
+                  <button class="btn primary" type="button" id="btn-settings-save-template">Save template</button>
+                </div>
+                <div class="custom-template-list settings-template-list" id="settings-custom-template-list"></div>
+              </article>
+            </div>
+            <div class="error settings-error" id="settings-error" hidden></div>
+          </div>
+        </div>
+      </main>
+      </div>
+    </div>
+
+    <dialog class="dialog" id="expense-dialog" aria-label="Expense">
+      <form class="dialog-form" id="expense-form">
+        <div class="dialog-head">
+          <div class="dialog-head__main">
+            <div class="dialog-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28"><path fill="currentColor" d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            </div>
+            <div>
+              <div class="dialog-title" id="expense-dialog-title">Add expense</div>
+              <div class="meta-chip meta-chip--tiny meta-chip--dialog" id="expense-dialog-subtitle">Private ledger entry</div>
+            </div>
+          </div>
+          <button
+            type="button"
+            class="icon-btn"
+            id="btn-close-expense-dialog"
+            aria-label="Close"
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          </button>
+        </div>
+
+        <div class="grid">
+          <div class="record-type-toggle col-span-2" role="group" aria-label="Record type">
+            <button class="record-type-btn is-active" type="button" id="btn-record-expense" data-record-type="expense">
+              Expense
+            </button>
+            <button class="record-type-btn" type="button" id="btn-record-income" data-record-type="income">
+              Income
+            </button>
+          </div>
+          <label class="field">
+            <span class="field-tag">Title</span>
+            <input id="f-title" name="title" maxlength="120" required />
+          </label>
+          <label class="field">
+            <span class="field-tag">Amount</span>
+            <input
+              id="f-amount"
+              name="amount"
+              type="number"
+              inputmode="decimal"
+              min="0.01"
+              step="0.01"
+              required
+            />
+          </label>
+          <label class="field">
+            <span class="field-tag">Date</span>
+            <input id="f-date" name="date" type="date" required />
+          </label>
+          <label class="field" id="expense-category-field">
+            <span class="field-tag">Category</span>
+            <select id="f-category" name="categoryId" required></select>
+          </label>
+          <label class="field col-span-2" id="expense-emotion-field">
+            <span class="field-tag">Spending mood</span>
+            <div class="emotion-pick" role="radiogroup" aria-label="Spending emotion">
+              <label class="emotion-opt"><input type="radio" name="emotionTag" value="" checked /> None</label>
+              <label class="emotion-opt"><input type="radio" name="emotionTag" value="happy" /> Happy</label>
+              <label class="emotion-opt"><input type="radio" name="emotionTag" value="impulse" /> Impulse</label>
+              <label class="emotion-opt"><input type="radio" name="emotionTag" value="necessary" /> Necessary</label>
+            </div>
+          </label>
+          <label class="field col-span-2">
+            <span class="field-tag">Notes</span>
+            <textarea
+              id="f-description"
+              name="description"
+              maxlength="500"
+              rows="3"
+              placeholder="Optional"
+            ></textarea>
+          </label>
+          <div class="receipt-field col-span-2" id="expense-receipt-field">
+            <div class="receipt-field__copy">
+              <span class="field-tag">Receipt (optional)</span>
+              <span class="receipt-hint">Attach a photo only if you want to keep the receipt.</span>
+            </div>
+            <div class="receipt-picker">
+              <label class="btn btn--ghost receipt-upload-btn" for="f-receipt">Attach image</label>
+              <span class="receipt-file-name" id="receipt-file-name">No receipt selected</span>
+              <input class="sr-only" id="f-receipt" type="file" accept="image/*" />
+            </div>
+            <div class="receipt-preview" id="receipt-preview" hidden>
+              <img id="receipt-preview-img" alt="Receipt preview" />
+              <button class="btn btn--ghost" type="button" id="btn-clear-receipt">Remove receipt</button>
+            </div>
+          </div>
+          <div class="smart-box col-span-2" id="expense-smart" hidden>
+            <div>
+              <div class="smart-box__title">Smart recognition</div>
+              <div class="smart-box__text" id="expense-smart-text">Type a title to get suggestions.</div>
+              <div class="smart-chips" id="expense-smart-chips"></div>
+            </div>
+            <button class="btn btn--ghost" type="button" id="btn-smart-recognize">Recognize</button>
+          </div>
+        </div>
+
+        <div class="dialog-actions">
+          <div class="dialog-actions-right">
+            <button type="button" class="btn" id="btn-expense-cancel">Cancel</button>
+            <button type="submit" class="btn primary" id="btn-save-expense">Save</button>
+          </div>
+        </div>
+
+        <div class="error" id="expense-form-error" hidden></div>
+      </form>
+    </dialog>
+
+    <dialog class="dialog" id="account-dialog" aria-label="Account settings">
+      <form class="dialog-form" id="account-form">
+        <div class="dialog-head">
+          <div class="dialog-head__main">
+            <div class="dialog-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28"><path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
+            <div>
+              <div class="dialog-title">Account settings</div>
+              <div class="meta-chip meta-chip--tiny meta-chip--dialog" id="account-dialog-subtitle">Private account</div>
+            </div>
+          </div>
+          <button type="button" class="icon-btn" id="btn-close-account-dialog" aria-label="Close">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          </button>
+        </div>
+
+        <div class="grid">
+          <label class="field col-span-2">
+            <span class="field-tag">Username</span>
+            <input id="account-username" minlength="3" maxlength="64" />
+          </label>
+          <label class="field">
+            <span class="field-tag">Current password</span>
+            <input id="account-current-password" type="password" autocomplete="current-password" />
+          </label>
+          <label class="field">
+            <span class="field-tag">New password</span>
+            <input id="account-new-password" type="password" autocomplete="new-password" minlength="6" />
+          </label>
+        </div>
+        <div class="dialog-actions">
+          <button type="button" class="btn danger" id="btn-delete-account">Delete account</button>
+          <div class="dialog-actions-right">
+            <button type="button" class="btn" id="btn-save-username">Save username</button>
+            <button type="button" class="btn primary" id="btn-save-password">Change password</button>
+          </div>
+        </div>
+        <div class="error" id="account-error" hidden></div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+    <aside class="kitty-assistant" id="kitty-assistant" hidden aria-label="Hello Kitty assistant">
+      <div class="kitty-panel" id="kitty-panel" hidden>
+        <header class="kitty-panel__head">
+          <div class="kitty-panel__avatar" data-hello-kitty-slot="panel" aria-hidden="true"></div>
+          <div class="kitty-panel__title">
+            <strong id="kitty-greeting-text">Hello Kitty</strong>
+            <span id="kitty-greeting-sub">Tips, encouragement & smart insights</span>
+          </div>
+          <button type="button" class="kitty-panel__close" id="kitty-close" aria-label="Close">×</button>
+        </header>
+        <div class="kitty-tip-banner" id="kitty-tip-banner"></div>
+        <nav class="kitty-tabs" aria-label="Assistant sections">
+          <button type="button" class="kitty-tab is-active" data-kitty-tab="chat">Chat</button>
+          <button type="button" class="kitty-tab" data-kitty-tab="record">Ledger</button>
+        </nav>
+        <div class="kitty-body">
+          <div class="kitty-pane" data-kitty-pane="chat">
+            <div class="kitty-messages" id="kitty-messages" aria-live="polite"></div>
+            <div class="kitty-chips" id="kitty-chips"></div>
+            <div class="kitty-compose">
+              <input id="kitty-input" type="text" placeholder="Message Hello Kitty…" maxlength="500" autocomplete="off" />
+              <button type="button" class="kitty-send" id="kitty-send" aria-label="Send">
+                <svg viewBox="0 0 24 24"><path fill="currentColor" d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="kitty-pane" data-kitty-pane="record" hidden>
+            <article class="kitty-ledger-card">
+              <header class="kitty-ledger-card__head">
+                <div>
+                  <span class="kitty-ledger-card__eyebrow">Quick entry</span>
+                  <h3 class="kitty-ledger-card__title">Post to ledger</h3>
+                  <p class="kitty-ledger-card__note">After you post, Hello Kitty will switch to Chat with tips and encouragement.</p>
+                </div>
+                <span class="kitty-ledger-card__badge">RosyLedger</span>
+              </header>
+              <div class="kitty-ledger-type" role="group" aria-label="Entry type">
+                <button type="button" class="kitty-ledger-type__btn is-active" id="kitty-record-type-expense">Expense</button>
+                <button type="button" class="kitty-ledger-type__btn" id="kitty-record-type-income">Income</button>
+              </div>
+              <div class="kitty-ledger-grid">
+                <label class="kitty-ledger-field kitty-ledger-field--wide">
+                  <span class="kitty-ledger-field__label">Description</span>
+                  <input id="kitty-record-title" maxlength="120" placeholder="e.g. Team lunch, Coffee" required />
+                </label>
+                <label class="kitty-ledger-field">
+                  <span class="kitty-ledger-field__label">Amount (USD)</span>
+                  <input id="kitty-record-amount" type="number" min="0.01" step="0.01" placeholder="0.00" inputmode="decimal" required />
+                </label>
+                <label class="kitty-ledger-field">
+                  <span class="kitty-ledger-field__label">Date</span>
+                  <input id="kitty-record-date" type="date" required />
+                </label>
+                <label class="kitty-ledger-field kitty-ledger-field--wide" id="kitty-record-category-wrap">
+                  <span class="kitty-ledger-field__label">Category</span>
+                  <select id="kitty-record-category"></select>
+                </label>
+                <label class="kitty-ledger-field kitty-ledger-field--wide">
+                  <span class="kitty-ledger-field__label">Notes <span class="kitty-ledger-optional">optional</span></span>
+                  <input id="kitty-record-notes" maxlength="200" placeholder="Memo or reference" />
+                </label>
+              </div>
+              <footer class="kitty-ledger-footer">
+                <div class="kitty-ledger-preview">
+                  <span class="kitty-ledger-preview__label">Entry total</span>
+                  <strong class="kitty-ledger-preview__amount" id="kitty-record-preview-amount">$0.00</strong>
+                </div>
+                <button type="button" class="kitty-ledger-submit" id="kitty-record-btn">Post entry</button>
+              </footer>
+            </article>
+          </div>
+        </div>
+      </div>
+      <div class="kitty-daily-bubble" id="kitty-daily-bubble" hidden role="status" aria-live="polite">
+        <div class="kitty-daily-bubble__inner">
+          <p class="kitty-daily-bubble__text" id="kitty-daily-bubble-text"></p>
+        </div>
+        <span class="kitty-daily-bubble__tail" aria-hidden="true"></span>
+        <button type="button" class="kitty-daily-bubble__close" id="kitty-daily-bubble-close" aria-label="Dismiss">×</button>
+      </div>
+      <button type="button" class="kitty-toggle" id="kitty-toggle" aria-label="Open Hello Kitty assistant" aria-expanded="false">
+        <span class="kitty-toggle__avatar" data-hello-kitty-slot="toggle" aria-hidden="true"></span>
+      </button>
+    </aside>
+
+    <dialog class="dialog mood-dialog" id="mood-dialog" aria-label="Daily mood">
+      <div class="mood-dialog__inner">
+        <div id="mood-pick-step">
+          <div class="dialog-title">How are you feeling today?</div>
+          <p class="mood-dialog__copy">Kitty wants to check in before we look at numbers.</p>
+          <div class="mood-grid">
+            <button type="button" class="mood-btn" data-mood="happy">😊 Happy</button>
+            <button type="button" class="mood-btn" data-mood="neutral">😐 Okay</button>
+            <button type="button" class="mood-btn" data-mood="low">😔 Low</button>
+          </div>
+          <button type="button" class="btn btn--ghost" id="btn-mood-skip">Skip for now</button>
+        </div>
+        <div id="mood-reply-step" hidden>
+          <img src="/images/hello-kitty-128.png" alt="" width="64" height="64" />
+          <p class="mood-kitty-reply" id="mood-kitty-reply"></p>
+          <button type="button" class="btn primary" id="btn-mood-done">Continue ♡</button>
+        </div>
+      </div>
+    </dialog>
+
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>

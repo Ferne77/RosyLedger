@@ -1,0 +1,33 @@
+{
+  "name": "RosyLedger",
+  "short_name": "RosyLedger",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff5f8",
+  "theme_color": "#db2777",
+  "description": "Cute personal ledger with Hello Kitty companion, mood check-ins, and wishlist.",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23db2777'/%3E%3Cpath fill='%23fff' d='M8 12h16v2H8zm0 6h10v2H8zm0 6h14v2H8z'/%3E%3C/svg%3E",
+      "sizes": "32x32",
+      "type": "image/svg+xml"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Chat with Kitty",
+      "url": "/#kitty-chat",
+      "description": "Open full-page Hello Kitty chat"
+    },
+    {
+      "name": "Today's budget",
+      "url": "/#overview",
+      "description": "See budget remaining"
+    },
+    {
+      "name": "Weekly report",
+      "url": "/#weekly-report",
+      "description": "Warm weekly summary"
+    }
+  ]
+}
