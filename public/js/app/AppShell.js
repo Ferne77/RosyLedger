@@ -53,7 +53,6 @@ export class AppShell {
     );
     $('#btn-settings-save-template').addEventListener('click', () => this.saveSettingsTemplate());
     $('#btn-settings-export').addEventListener('click', () => this.exportData());
-    $('#btn-settings-logout').addEventListener('click', () => this.logout());
     $('#btn-close-account-dialog').addEventListener('click', () => $('#account-dialog').close());
     $('#btn-save-username').addEventListener('click', () => this.saveUsername());
     $('#btn-save-password').addEventListener('click', () => this.savePassword());
