@@ -1,6 +1,10 @@
 # RosyLedger
 
+**Assignment 2 · submission**
+
 **Author:** LYUYI YE · **Student ID:** 25656632 · **GitHub:** [@Ferne77](https://github.com/Ferne77) / [RosyLedger](https://github.com/Ferne77/RosyLedger)
+
+This repository contains my **individual** coursework submission for **Assignment 2**. All design, implementation, and documentation were completed by me alone.
 
 RosyLedger is a pink-themed personal expense tracker with a Hello Kitty companion. It combines a FastAPI + MongoDB Atlas backend with a Vanilla JS single-page frontend: ledger CRUD, budget planning, analytics, realtime sync, offline drafts, and companion features such as mood check-ins, wishlists, achievements, and weekly reports.
 
@@ -291,13 +295,14 @@ Protected routes expect: `Authorization: Bearer <token>`.
 - **Hello Kitty:** Floating bottom-right panel for quick chat and ledger entry; full Chat page for longer conversations.
 - **Themes:** Settings → Kitty wardrobe; choice persists in `localStorage` and syncs to the server profile.
 
+## Assignment Submission
+
+- **Coursework:** Assignment 2 code submission.
+- **Work type:** Individual assignment — not a group project.
+- **Author:** LYUYI YE (25656632) is the sole author of this repository.
+
 ## Notes for Graders
 
 - MongoDB Atlas is the primary data store (not local mock storage).
 - Connection credentials are configured in `app/config.py` for out-of-the-box connectivity.
 - Development data uses database `expense_tracker_dev`, separate from the submitted grading database.
-- This repository is authored solely by **LYUYI YE (25656632)**.
-
-## License
-
-This project was submitted as coursework. All code is original work by the author listed above unless otherwise noted.
