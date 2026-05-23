@@ -5,7 +5,7 @@
       document.documentElement.dataset.session = 'out';
     </script>
     <script type="module">
-      import { applyStoredTheme } from '/js/lib/themeManager.js';
+      import { applyStoredTheme } from '/js/lib/themeManager.js?v=13';
       applyStoredTheme();
     </script>
     <style id="auth-gate">
@@ -24,22 +24,22 @@
     </style>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#fff5f8" />
+    <meta name="app-version" content="13" />
     <link rel="manifest" href="/manifest.json" />
     <title>RosyLedger</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23db2777'/%3E%3Cpath fill='%23fff' d='M8 12h16v2H8zm0 6h10v2H8zm0 6h14v2H8z'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/css/tokens.css?v=8" />
-    <link rel="stylesheet" href="/css/base.css?v=9" />
-    <link rel="stylesheet" href="/css/layout.css?v=10" />
-    <link rel="stylesheet" href="/css/components.css?v=9" />
-    <link rel="stylesheet" href="/css/stats.css?v=10" />
-    <link rel="stylesheet" href="/css/dialog.css?v=8" />
-    <link rel="stylesheet" href="/css/kitty-assistant.css?v=8" />
-    <link rel="stylesheet" href="/css/cute-theme.css?v=11" />
-    <link rel="stylesheet" href="/css/companion-features.css?v=3" />
+    <link rel="stylesheet" href="/css/tokens.css?v=13" />
+    <link rel="stylesheet" href="/css/base.css?v=13" />
+    <link rel="stylesheet" href="/css/layout.css?v=13" />
+    <link rel="stylesheet" href="/css/components.css?v=14" />
+    <link rel="stylesheet" href="/css/stats.css?v=14" />
+    <link rel="stylesheet" href="/css/dialog.css?v=13" />
+    <link rel="stylesheet" href="/css/kitty-assistant.css?v=13" />
+    <link rel="stylesheet" href="/css/cute-theme.css?v=13" />
+    <link rel="stylesheet" href="/css/companion-features.css?v=14" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   </head>
   <body>
@@ -57,18 +57,43 @@
         </div>
         <h1 class="auth-title" id="auth-title">Welcome back</h1>
         <p class="auth-copy" id="auth-copy">Sign in to keep your ledger, budget, and smart suggestions private.</p>
-        <form class="auth-form" id="auth-form">
+        <form class="auth-form" id="auth-form" autocomplete="off" novalidate>
           <label class="field">
             <span class="field-tag">Username</span>
-            <input id="auth-username" autocomplete="username" required minlength="3" maxlength="64" />
+            <input
+              id="auth-username"
+              name="rosyledger-username"
+              autocomplete="off"
+              autocapitalize="none"
+              spellcheck="false"
+              placeholder="Choose any username (3+ characters)"
+              required
+              minlength="3"
+              maxlength="64"
+            />
           </label>
           <label class="field">
             <span class="field-tag">Password</span>
-            <input id="auth-password" type="password" autocomplete="current-password" required minlength="6" />
+            <input
+              id="auth-password"
+              name="rosyledger-password"
+              type="password"
+              autocomplete="off"
+              placeholder="Your password (6+ characters)"
+              required
+              minlength="6"
+            />
           </label>
           <label class="field" id="auth-confirm-wrap" hidden>
             <span class="field-tag">Confirm password</span>
-            <input id="auth-confirm-password" type="password" autocomplete="new-password" minlength="6" />
+            <input
+              id="auth-confirm-password"
+              name="rosyledger-password-confirm"
+              type="password"
+              autocomplete="off"
+              placeholder="Repeat your password"
+              minlength="6"
+            />
           </label>
           <div class="auth-actions">
             <button class="btn primary" id="btn-auth-submit" type="submit">Login</button>
@@ -473,7 +498,6 @@
               <div class="chart-head chart-head--pie">
                 <div>
                   <h3 class="h3">Category split</h3>
-                  <p class="chart-subtitle">Where your spending goes</p>
                 </div>
                 <div class="chart-stat-pill chart-stat-pill--controls" role="group" aria-label="Category chart scope">
                   <div class="mini-toggle-group">
@@ -488,9 +512,7 @@
                 <div class="chart-box chart-box--pie">
                   <canvas id="chart-category" aria-label="Category share"></canvas>
                 </div>
-                <div class="chart-empty" id="category-empty" hidden>
-                  Add expenses to see category distribution.
-                </div>
+                <div class="chart-empty" id="category-empty" hidden>No spending yet</div>
               </div>
             </div>
             <div class="card pad chart-surface chart-surface--trend">
@@ -923,6 +945,7 @@
               </article>
             </div>
             <div class="error settings-error" id="settings-error" hidden></div>
+            <p class="settings-version" id="settings-app-version">RosyLedger · Assignment 2 · v13</p>
           </div>
         </div>
       </main>
@@ -1188,6 +1211,6 @@
       </div>
     </dialog>
 
-    <script type="module" src="/js/app.js"></script>
+    <script type="module" src="/js/app.js?v=13"></script>
   </body>
 </html>

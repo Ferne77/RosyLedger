@@ -82,9 +82,12 @@ export async function refreshVisibleViews({ scope = 'all' } = {}) {
   }
 
   if (viewVisible('view-kitty-chat')) tasks.push(kittyChatView.refresh());
-  if (viewVisible('view-weekly-report')) tasks.push(companionViews.renderWeekly());
-  if (viewVisible('view-wishlist')) tasks.push(companionViews.renderWishlist());
-  if (viewVisible('view-achievements')) tasks.push(companionViews.renderAchievements());
+
+  if (scope === 'companion' || scope === 'all') {
+    if (viewVisible('view-weekly-report')) tasks.push(companionViews.renderWeekly());
+    if (viewVisible('view-wishlist')) tasks.push(companionViews.renderWishlist());
+    if (viewVisible('view-achievements')) tasks.push(companionViews.renderAchievements());
+  }
 
   await Promise.all(tasks);
 }

@@ -316,10 +316,21 @@
 /* Wishlist */
 .wish-form {
   display: grid;
-  grid-template-columns: 1fr 140px auto;
-  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) minmax(108px, 132px);
+  gap: 12px;
   align-items: end;
   margin-bottom: 14px;
+}
+
+.wish-form #btn-add-wish {
+  grid-column: 1 / -1;
+  width: fit-content;
+  min-width: 120px;
+  margin-top: 2px;
+}
+
+.wish-form .field {
+  min-width: 0;
 }
 
 .wish-form input {

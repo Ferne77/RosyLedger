@@ -417,18 +417,21 @@
 
 .chart-empty {
   position: absolute;
-  inset: 50%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  width: min(260px, 80%);
-  padding: 14px 16px;
-  border-radius: 18px;
+  width: min(220px, 72%);
+  padding: 10px 14px;
+  border-radius: 999px;
   text-align: center;
-  color: var(--muted);
-  background: rgba(255, 255, 255, 0.86);
+  color: #9d174d;
+  background: rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(236, 72, 153, 0.14);
   font-weight: 700;
-  font-size: 13px;
+  font-size: 12px;
+  line-height: 1.4;
   z-index: 2;
+  pointer-events: none;
 }
 
 @media (max-width: 1040px) {

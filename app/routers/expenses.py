@@ -50,6 +50,7 @@ async def sync_expenses(body: ExpenseSyncRequest, user: dict = Depends(current_u
                 amount_cents=amount_cents,
                 date=item.date,
                 description=item.description,
+                emotion_tag=item.emotionTag,
             )
             results.append({"clientId": item.clientId, "id": record_id, "created": created})
         except InvalidId:
@@ -90,6 +91,7 @@ async def create_expense(body: ExpenseCreate, user: dict = Depends(current_user)
                 amount_cents=amount_cents,
                 date=body.date,
                 description=body.description,
+                emotion_tag=body.emotionTag,
             )
         else:
             eid = await repo.create_expense(

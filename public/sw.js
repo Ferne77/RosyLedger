@@ -1,5 +1,6 @@
-const CACHE = 'rosyledger-shell-v6';
-const SHELL_ASSETS = ['/', '/js/app.js'];
+const APP_VERSION = '13';
+const CACHE = `rosyledger-shell-v${APP_VERSION}`;
+const SHELL_ASSETS = [`/js/app.js?v=${APP_VERSION}`];
 
 function isStaticAsset(pathname) {
   return pathname === '/' || pathname.startsWith('/js/') || pathname === '/manifest.json';
@@ -37,10 +38,10 @@ self.addEventListener('fetch', (event) => {
       .then((response) => {
         if (response.ok) {
           const copy = response.clone();
-          caches.open(CACHE).then((cache) => cache.put(url.pathname, copy));
+          caches.open(CACHE).then((cache) => cache.put(event.request.url, copy));
         }
         return response;
       })
-      .catch(() => caches.match(url.pathname))
+      .catch(() => caches.match(event.request.url))
   );
 });

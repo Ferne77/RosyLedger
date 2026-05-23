@@ -264,13 +264,41 @@ export class AppShell {
     document.documentElement.dataset.session = active ? 'in' : 'out';
   }
 
+  resetAuthForm() {
+    const username = $('#auth-username');
+    const password = $('#auth-password');
+    const confirm = $('#auth-confirm-password');
+    [username, password, confirm].forEach((el) => {
+      if (!el) return;
+      el.value = '';
+      el.defaultValue = '';
+    });
+    const error = $('#auth-error');
+    if (error) error.hidden = true;
+  }
+
+  armAuthFields() {
+    const fields = [$('#auth-username'), $('#auth-password'), $('#auth-confirm-password')];
+    fields.forEach((el) => {
+      if (!el) return;
+      el.setAttribute('readonly', 'readonly');
+      const unlock = () => {
+        el.removeAttribute('readonly');
+        el.removeEventListener('focus', unlock);
+        el.removeEventListener('mousedown', unlock);
+      };
+      el.addEventListener('focus', unlock);
+      el.addEventListener('mousedown', unlock);
+    });
+  }
+
   showAuth() {
     this._setSession(false);
     $('#auth-screen').hidden = false;
     $('#app-shell').hidden = true;
-    $('#auth-password').value = '';
-    $('#auth-confirm-password').value = '';
+    this.resetAuthForm();
     this.setAuthMode('login');
+    this.armAuthFields();
     if (location.hash) {
       history.replaceState(null, '', `${location.pathname}${location.search}`);
     }
@@ -288,8 +316,8 @@ export class AppShell {
     $('#btn-register').textContent = isRegister ? 'Back to login' : 'Create account';
     $('#auth-confirm-wrap').hidden = !isRegister;
     $('#auth-confirm-password').required = isRegister;
-    $('#auth-password').autocomplete = isRegister ? 'new-password' : 'current-password';
     $('#auth-error').hidden = true;
+    this.armAuthFields();
   }
 
   async showApp() {
@@ -297,6 +325,7 @@ export class AppShell {
     $('#auth-screen').hidden = true;
     $('#app-shell').hidden = false;
     this.renderUserIdentity();
+    companionViews.mount();
     startRealtime();
     await companionViews.onLogin();
     await kittyAssistant.onLogin();
@@ -364,9 +393,17 @@ export class AppShell {
       setToken(data.token);
       state.user = data.user;
       await this.showApp();
-      await this.initializeLedger();
+      try {
+        await this.initializeLedger();
+      } catch (loadErr) {
+        toast(loadErr.message || 'Signed in, but some data failed to load');
+      }
     } catch (err) {
-      box.textContent = err.message;
+      const msg =
+        err.status === 401
+          ? 'Invalid username or password. On a new browser, use Create account first, or re-enter the password you chose (not a browser autofill guess).'
+          : err.message;
+      box.textContent = msg;
       box.hidden = false;
     }
   }

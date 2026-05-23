@@ -268,6 +268,7 @@ async def upsert_by_client_id(
     amount_cents: int,
     date: str,
     description: str,
+    emotion_tag: str | None = None,
 ) -> tuple[str, bool]:
     existing = await db["expenses"].find_one(
         {"userId": user_oid, "clientId": client_id, **active_filter()}
@@ -279,6 +280,7 @@ async def upsert_by_client_id(
             "amountCents": amount_cents,
             "date": date,
             "description": description,
+            "emotionTag": emotion_tag or "",
         }
         if type_ == "expense" and category_id:
             updates["categoryId"] = category_id
@@ -299,6 +301,7 @@ async def upsert_by_client_id(
         amount_cents=amount_cents,
         date=date,
         description=description,
+        emotion_tag=emotion_tag,
         client_id=client_id,
     )
     return new_id, True

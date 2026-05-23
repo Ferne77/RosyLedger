@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from app.auth import current_user
 from app.db import get_db
 from app.mongo_id import require_object_id
+from app.notify import publish_refresh
 from app.repositories import companion_repo
 from app.schemas import (
     MoodCheckinCreate,
@@ -51,7 +52,9 @@ async def mood_today(user: dict = Depends(current_user)):
 async def save_mood(body: MoodCheckinCreate, user: dict = Depends(current_user)):
     db = get_db()
     try:
-        return await companion_repo.save_mood(db, user["_id"], body.mood)
+        result = await companion_repo.save_mood(db, user["_id"], body.mood)
+        publish_refresh(user["_id"], "companion")
+        return result
     except ValueError:
         raise HTTPException(status_code=400, detail={"error": "Invalid mood"})
 
@@ -70,6 +73,7 @@ async def create_wish(body: WishlistCreate, user: dict = Depends(current_user)):
         db, user["_id"], body.title, to_amount_cents(body.amount)
     )
     new_achievements = await companion_repo._evaluate_achievements(db, user["_id"])
+    publish_refresh(user["_id"], "companion")
     return {"id": wid, "newAchievements": new_achievements}
 
 
@@ -84,6 +88,7 @@ async def update_wish_saved(
     )
     if not ok:
         raise HTTPException(status_code=404, detail={"error": "Not found"})
+    publish_refresh(user["_id"], "companion")
     return {"ok": True}
 
 
@@ -94,6 +99,7 @@ async def delete_wish(wish_id: str, user: dict = Depends(current_user)):
     ok = await companion_repo.delete_wish(db, user["_id"], oid)
     if not ok:
         raise HTTPException(status_code=404, detail={"error": "Not found"})
+    publish_refresh(user["_id"], "companion")
     return {"ok": True}
 
 
