@@ -4,9 +4,11 @@
 
 **Author:** LYUYI YE · **Student ID:** 25656632 · **GitHub:** [@Ferne77](https://github.com/Ferne77) / [RosyLedger](https://github.com/Ferne77/RosyLedger)
 
-This repository contains my **individual** coursework submission for **Assignment 2**. All design, implementation, and documentation were completed by me alone.
+This repository contains my **individual** coursework submission for **Assignment 2** (not a group project). All design, implementation, and documentation were completed by me alone.
 
 RosyLedger is a pink-themed personal expense tracker with a Hello Kitty companion. It combines a FastAPI + MongoDB Atlas backend with a Vanilla JS single-page frontend: ledger CRUD, budget planning, analytics, realtime sync, offline drafts, and companion features such as mood check-ins, wishlists, achievements, and weekly reports.
+
+**For graders:** Data is stored in **MongoDB Atlas** (not local mock storage). Connection credentials and database name are preconfigured in `app/config.py` for out-of-the-box connectivity — database **`expense_tracker_dev`** (same for local development and grading).
 
 ## Project Overview
 
@@ -140,7 +142,7 @@ All runtime settings live in `AppSettings` (`app/config.py`) with fixed defaults
 | Key | Description |
 |-----|-------------|
 | `mongodb_uri` | MongoDB Atlas connection string (preconfigured for this project) |
-| `db_name` | Development database: `expense_tracker_dev` |
+| `db_name` | MongoDB database name: `expense_tracker_dev` (used for local dev and grading) |
 | `port` | Default `3000` |
 | `node_env` | `development` |
 | `auth_secret` | JWT signing secret |
@@ -294,15 +296,3 @@ Protected routes expect: `Authorization: Bearer <token>`.
 - **Offline:** Drafts are stored in IndexedDB and uploaded via the sync endpoint when back online.
 - **Hello Kitty:** Floating bottom-right panel for quick chat and ledger entry; full Chat page for longer conversations.
 - **Themes:** Settings → Kitty wardrobe; choice persists in `localStorage` and syncs to the server profile.
-
-## Assignment Submission
-
-- **Coursework:** Assignment 2 code submission.
-- **Work type:** Individual assignment — not a group project.
-- **Author:** LYUYI YE (25656632) is the sole author of this repository.
-
-## Notes for Graders
-
-- MongoDB Atlas is the primary data store (not local mock storage).
-- Connection credentials are configured in `app/config.py` for out-of-the-box connectivity.
-- Development data uses database `expense_tracker_dev`, separate from the submitted grading database.
